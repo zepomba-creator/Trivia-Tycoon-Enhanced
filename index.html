@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>V2.3.3 (Funciona) - Trivia Tycoon Enhanced</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trivia Tycoon Enhanced</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="game-container">
+  <div id="header">
+    <div class="ad-banner" onclick="watchAd('bonus')">
+      <span>📺</span> ASSISTIR ANÚNCIO (+$<span id="ad-value">50</span>)
+    </div>
+    
+    <div class="top-row">
+      <div class="stat-pill money-pill">
+        <span>💰</span> <span id="money">100</span>
+      </div>
+      <div class="stat-pill level-pill">
+        <span>⭐</span> Nv. <span id="level">1</span>
+      </div>
+    </div>
+    
+    <div class="bars-container">
+      <div class="bar-row">
+        <small>⚡ Energia</small>
+        <small id="energy-text">5/5</small>
+      </div>
+      <div class="progress-track">
+        <div id="energy-bar" class="progress-fill energy-fill"></div>
+      </div>
+      
+      <div class="bar-row" style="margin-top:5px">
+        <small>💼 XP Carreira</small>
+        <small id="xp-text">0/100</small>
+      </div>
+      <div class="progress-track">
+        <div id="xp-bar" class="progress-fill xp-fill"></div>
+      </div>
+    </div>
+    
+    <div class="day-indicator">📅 Dia <span id="day-text">1</span></div>
+  </div>
+
+  <div class="tabs">
+    <button onclick="showTab('trivia')" id="btn-trivia" class="active">🏆 QUIZ</button>
+    <button onclick="showTab('home')" id="btn-home">🏠 CASA</button>
+    <button onclick="showTab('job')" id="btn-job">💼 JOB</button>
+    <button onclick="showTab('casino')" id="btn-casino">🎰 CASINO</button>
+    <button onclick="showTab('shop')" id="btn-shop">🏢 LOJA</button>
+  </div>
+
+  <div id="trivia" class="content">
+    <div id="trivia-lobby">
+      <h3 class="section-title">🎯 Escolha o Torneio</h3>
+      <div class="tournament-card tier-1" onclick="startTournament('beginner')">
+        <div class="t-icon">🌱</div>
+        <div class="t-info">
+          <strong>Liga Iniciante</strong>
+          <small>Prémio Base: $25 | Custo: 1 ⚡</small>
+        </div>
+      </div>
+      <div class="tournament-card tier-1" onclick="startTournament('easy')">
+        <div class="t-icon">🥉</div>
+        <div class="t-info">
+          <strong>Taça de Bairro</strong>
+          <small>Prémio Base: $50 | Req: Nv. 2 | Custo: 1 ⚡</small>
+        </div>
+      </div>
+      <div class="tournament-card tier-2" onclick="startTournament('medium')">
+        <div class="t-icon">🥈</div>
+        <div class="t-info">
+          <strong>Quiz Nacional</strong>
+          <small>Prémio Base: $150 | Req: Nv. 5 | Custo: 2 ⚡</small>
+        </div>
+      </div>
+      <div class="tournament-card tier-2" onclick="startTournament('advanced')">
+        <div class="t-icon">🏅</div>
+        <div class="t-info">
+          <strong>Campeonato Regional</strong>
+          <small>Prémio Base: $400 | Req: Nv. 8 | Custo: 2 ⚡</small>
+        </div>
+      </div>
+      <div class="tournament-card tier-3" onclick="startTournament('hard')">
+        <div class="t-icon">🥇</div>
+        <div class="t-info">
+          <strong>Tycoon Master</strong>
+          <small>Prémio Base: $800 | Req: Nv. 12 | Custo: 3 ⚡</small>
+        </div>
+      </div>
+      <div class="tournament-card tier-4" onclick="startTournament('extreme')">
+        <div class="t-icon">👑</div>
+        <div class="t-info">
+          <strong>Elite Mundial</strong>
+          <small>Prémio Base: $2000 | Req: Nv. 18 | Custo: 4 ⚡</small>
+        </div>
+      </div>
+    </div>
+
+    <div id="trivia-game" style="display:none">
+      <div class="game-hud">
+        <div class="pot-display">
+          <span class="pot-label">💎 ACUMULADO</span>
+          <div class="pot-value">$<span id="pot-money">0</span></div>
+        </div>
+        <button class="btn-mini-danger" onclick="quitTournament()">✖ SAIR</button>
+      </div>
+      
+      <div class="multiplier-bar">
+        <div class="mult-info">
+          <span class="mult-question">Pergunta <span id="question-number">1</span></span>
+          <div class="mult-display">
+            <span class="mult-label">MULT</span>
+            <span class="mult-value" id="multiplier">1.0</span>
+            <span class="mult-x">×</span>
+          </div>
+        </div>
+        <div class="streak-bar">
+          <div class="streak-fill" id="streak-fill"></div>
+          <div class="streak-markers">
+            <span>1×</span><span>2×</span><span>3×</span><span>4×</span><span>5×</span>
+          </div>
+        </div>
+      </div>
+      
+      <div id="question-area">
+        <div class="question-box">
+          <div class="question-category" id="question-category">📚 Categoria</div>
+          <p id="question-text">...</p>
+        </div>
+        <div id="options-container"></div>
+      </div>
+
+      <div id="decision-area" style="display:none;">
+        <div class="decision-box">
+          <div class="decision-header">
+            <div class="decision-icon">🎉</div>
+            <h2>RESPOSTA CORRETA!</h2>
+          </div>
+          <div class="decision-amount">
+            <span class="amount-label">Tens garantido</span>
+            <span class="amount-value">$<span id="decision-money">0</span></span>
+          </div>
+          <div class="xp-gain">+<span id="xp-gain">0</span> XP</div>
+          <div class="risk-preview">
+            <div class="risk-item safe">
+              <span class="risk-icon">🛡️</span>
+              <span>Sair agora: <strong>$<span id="safe-amount">0</span></strong></span>
+            </div>
+            <div class="risk-item risky">
+              <span class="risk-icon">🔥</span>
+              <span>Se acertares: <strong>$<span id="risk-amount">0</span></strong></span>
+            </div>
+          </div>
+          <div class="decision-buttons">
+            <button class="btn-primary safe-gradient" onclick="cashOut()">
+              <span class="btn-emoji">💰</span>
+              GARANTIR
+            </button>
+            <button class="btn-primary risk-gradient" onclick="continueQuiz()">
+              <span class="btn-emoji">🚀</span>
+              ARRISCAR!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="home" class="content" style="display:none">
+    <div class="club-penguin-room">
+      <div class="room-sky"></div>
+      <div class="room-back-wall">
+        <div id="wall-items"></div>
+      </div>
+      <div class="room-floor">
+        <div id="floor-items"></div>
+      </div>
+    </div>
+    <h3 class="section-title">🛋️ Decoração & Conforto</h3>
+    <div id="furniture-list" class="scroll-list"></div>
+    
+    <h3 class="section-title" style="margin-top:24px">🎨 Itens Raros do Mundo Real</h3>
+    <div id="rare-items-list" class="scroll-list"></div>
+  </div>
+
+  <div id="job" class="content" style="display:none">
+    <h3 class="section-title">Plano de Carreira</h3>
+    <div id="job-list" class="scroll-list"></div>
+  </div>
+
+  <div id="casino" class="content" style="display:none">
+    <div class="casino-panel slot-machine">
+      <div class="casino-header">
+        <h3>🎰 Slot Machine Deluxe</h3>
+        <button class="info-btn" onclick="toggleSlotInfo(event)">?</button>
+      </div>
+      <div id="slot-info" class="info-panel" style="display:none">
+        <div class="info-title">🎰 Como Jogar Slots</div>
+        <div class="info-row">💎💎💎 = $2,500</div>
+        <div class="info-row">7️⃣7️⃣7️⃣ = $1,000</div>
+        <div class="info-row">⭐⭐⭐ = $500</div>
+        <div class="info-row">🍒🍒🍒 = $250</div>
+        <div class="info-row">🍋🍋🍋 = $250</div>
+      </div>
+      <div class="slot-wrapper">
+        <div class="slot-display">
+          <span id="slot-1" class="slot-reel">🍒</span>
+          <span id="slot-2" class="slot-reel">🍒</span>
+          <span id="slot-3" class="slot-reel">🍒</span>
+        </div>
+        <div class="slot-glow"></div>
+      </div>
+      <div class="slot-controls">
+        <button class="btn-primary danger-gradient" onclick="spinSlots()">
+          <span class="btn-icon">🎰</span> GIRAR ($50)
+        </button>
+      </div>
+      <div id="slot-msg" class="msg-box"></div>
+    </div>
+
+    <div class="casino-panel blackjack-table">
+      <div class="casino-header">
+        <h3>🃏 BlackJack Pro</h3>
+        <button class="info-btn" onclick="toggleBJInfo(event)">?</button>
+      </div>
+      <div id="bj-info" class="info-panel" style="display:none">
+        <div class="info-title">🃏 Como Jogar BlackJack</div>
+        <div class="info-section">
+          <strong>🎯 Objetivo:</strong>
+          <p>Chegar o mais perto possível de 21 pontos sem ultrapassar.</p>
+        </div>
+        <div class="info-section">
+          <strong>📋 Regras:</strong>
+          <p>• Cartas 2-10: valor facial</p>
+          <p>• J, Q, K: valem 10 pontos</p>
+          <p>• Ás: vale 1 ou 11 pontos</p>
+        </div>
+        <div class="info-section">
+          <strong>🎮 Ações:</strong>
+          <p>• <span class="action-hit">PEDIR</span>: Receber mais uma carta</p>
+          <p>• <span class="action-stand">FICAR</span>: Manter as cartas atuais</p>
+        </div>
+        <div class="info-section">
+          <strong>💰 Pagamentos:</strong>
+          <p>• Vitória: 2× a aposta</p>
+          <p>• Empate: Devolve a aposta</p>
+          <p>• Bust (>21): Perde a aposta</p>
+        </div>
+      </div>
+      <div class="bj-grid">
+        <div class="bj-seat dealer-seat">
+          <small>DEALER</small>
+          <div id="bj-dealer-val" class="card-bubble">?</div>
+        </div>
+        <div class="bj-seat player-seat">
+          <small>VOCÊ</small>
+          <div id="bj-player-val" class="card-bubble">0</div>
+        </div>
+      </div>
+      
+      <div id="bj-bet-selector">
+        <p style="margin-bottom:12px; font-weight:600">Faça a sua aposta:</p>
+        <div class="chip-row">
+          <button class="chip chip-100" onclick="startBJ(100)">$100</button>
+          <button class="chip chip-500" onclick="startBJ(500)">$500</button>
+          <button class="chip chip-2k" onclick="startBJ(2000)">$2K</button>
+        </div>
+      </div>
+      
+      <div id="bj-actions" style="display:none">
+        <div class="bj-action-buttons">
+          <button class="btn-primary success-gradient" onclick="hitBJ()">
+            <span style="font-size:20px">+</span><br>PEDIR
+          </button>
+          <button class="btn-primary warning-gradient" onclick="standBJ()">
+            <span style="font-size:20px">✋</span><br>FICAR
+          </button>
+        </div>
+      </div>
+      <p id="bj-msg" class="msg-box"></p>
+    </div>
+    
+    <div class="casino-panel roulette-table">
+      <div class="casino-header">
+        <h3>🎡 Roleta da Fortuna</h3>
+        <button class="info-btn" onclick="toggleRouletteInfo(event)">?</button>
+      </div>
+      <div id="roulette-info" class="info-panel" style="display:none">
+        <div class="info-title">🎡 Como Jogar Roleta</div>
+        <div class="info-section">
+          <p>• Escolha uma cor para apostar</p>
+          <p>• A roda gira e para numa cor</p>
+          <p>• Verde: 10× a aposta</p>
+          <p>• Vermelho/Preto: 2× a aposta</p>
+        </div>
+      </div>
+      <div class="roulette-container">
+        <div class="roulette-arrow" id="roulette-arrow">▼</div>
+        <div class="roulette-wheel" id="roulette-wheel">
+          <div class="roulette-segment seg-red seg-1"></div>
+          <div class="roulette-segment seg-black seg-2"></div>
+          <div class="roulette-segment seg-red seg-3"></div>
+          <div class="roulette-segment seg-black seg-4"></div>
+          <div class="roulette-segment seg-green seg-5"></div>
+          <div class="roulette-segment seg-black seg-6"></div>
+          <div class="roulette-segment seg-red seg-7"></div>
+          <div class="roulette-segment seg-black seg-8"></div>
+          <div class="roulette-center">🎯</div>
+        </div>
+        <div class="roulette-result" id="roulette-result-display"></div>
+      </div>
+      <div class="roulette-bets">
+        <button class="roulette-btn red" onclick="betRoulette('red', 200)">VERMELHO ($200)</button>
+        <button class="roulette-btn black" onclick="betRoulette('black', 200)">PRETO ($200)</button>
+        <button class="roulette-btn green" onclick="betRoulette('green', 200)">VERDE ($200)</button>
+      </div>
+      <div id="roulette-msg" class="msg-box"></div>
+      <small style="color:#94a3b8; display:block; margin-top:8px">Verde: 10× | Vermelho/Preto: 2×</small>
+    </div>
+  </div>
+
+  <div id="shop" class="content" style="display:none">
+    <div class="simple-shop-nav">
+      <button class="simple-shop-btn active" onclick="showShopCategory('properties')">🏠 Propriedades</button>
+      <button class="simple-shop-btn" onclick="showShopCategory('vehicles')">🚗 Veículos</button>
+      <button class="simple-shop-btn" onclick="showShopCategory('luxury')">💎 Luxo</button>
+    </div>
+
+    <div id="shop-properties" class="shop-category">
+      <h3 class="section-title">🏠 Propriedades</h3>
+      <div id="properties-list" class="scroll-list"></div>
+    </div>
+
+    <div id="shop-vehicles" class="shop-category" style="display:none">
+      <h3 class="section-title">🚗 Carros</h3>
+      <div id="cars-list" class="scroll-list"></div>
+      
+      <h3 class="section-title" style="margin-top:24px">🏍️ Motas</h3>
+      <div id="bikes-list" class="scroll-list"></div>
+      
+      <h3 class="section-title" style="margin-top:24px">🛥️ Barcos & Yachts</h3>
+      <div id="boats-list" class="scroll-list"></div>
+      
+      <h3 class="section-title" style="margin-top:24px">✈️ Aviões & Helicópteros</h3>
+      <div id="aircraft-list" class="scroll-list"></div>
+    </div>
+
+    <div id="shop-luxury" class="shop-category" style="display:none">
+      <h3 class="section-title">⌚ Relógios de Luxo</h3>
+      <div id="watches-list" class="scroll-list"></div>
+      
+      <h3 class="section-title" style="margin-top:24px">💍 Jóias & Gemas</h3>
+      <div id="jewelry-list" class="scroll-list"></div>
+      
+      <h3 class="section-title" style="margin-top:24px">🗿 Arte & Colecionáveis</h3>
+      <div id="collectibles-list" class="scroll-list"></div>
+      
+      <h3 class="section-title" style="margin-top:24px">🎴 Itens Raros</h3>
+      <div id="rare-items-shop-list" class="scroll-list"></div>
+    </div>
+  </div>
+
+  <div id="day-modal" class="modal-overlay" style="display:none">
+    <div class="modal-card">
+      <div class="modal-header">📊 RELATÓRIO DO DIA <span id="report-day">1</span></div>
+      <div class="report-grid">
+        <div class="report-item">
+          <span>💵 Ganhos</span>
+          <span id="report-money" class="text-success">+$0</span>
+        </div>
+        <div class="report-item">
+          <span>📉 Contas</span>
+          <span id="report-bills" class="text-danger">-$0</span>
+        </div>
+        <div class="report-item report-total">
+          <span>💰 Saldo Final</span>
+          <span id="report-balance">$0</span>
+        </div>
+      </div>
+      <hr>
+      <p id="report-status"></p>
+      <button class="btn-primary success-gradient" onclick="startNewDay()">🌅 INICIAR NOVO DIA</button>
+    </div>
+  </div>
+  
+  <div id="particles-container"></div>
+</div>
+
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
